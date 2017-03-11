@@ -16,6 +16,10 @@ function extract_section($lines, $section) {
 
     $start = array_search($start_delim, $lines) + 1;
     $end = array_search($end_delim, $lines);
+    
+    if ($start === false || $end === false) {
+        return false;
+    }
 
     $content = array_slice($lines, $start, $end-$start);
 
@@ -23,7 +27,7 @@ function extract_section($lines, $section) {
 }
 
 function compile_plugin($file='') {
-    global $plugin;
+    global $plugin, $compiler_cfg;
 
     if (empty($file))
         $file = $_SERVER['SCRIPT_FILENAME'];
@@ -40,6 +44,32 @@ function compile_plugin($file='') {
 
     $plugin['help'] = trim(extract_section($content, 'HELP'));
     $plugin['code'] = extract_section($content, 'CODE');
+    
+    if (! $plugin['help'] && $plugin['allow_html_help'] && ! empty($compiler_cfg['parser'])) {
+        if (isset($compiler_cfg['helpfile'])) {
+            $first_frame = array_pop(debug_backtrace());
+            $helpfile = dirname($first_frame['file']).'/'.$compiler_cfg['helpfile'];
+            $content = file($helpfile);
+            for ($i=0; $i < count($content); $i++) {
+                $content[$i] = rtrim($content[$i]);
+            }
+            $plugin['help'] = trim(join("\n", $content));
+        }
+        
+        if ($plugin['help']) {
+            if ($compiler_cfg['parser'] == 'textile' && defined('PATH_TO_TEXTILE')) {
+                require PATH_TO_TEXTILE.'/Parser.php';
+                require PATH_TO_TEXTILE.'/DataBag.php';
+                require PATH_TO_TEXTILE.'/Tag.php';
+                $parser = new \Netcarver\Textile\Parser('html5');
+                $plugin['help'] = $parser->parse($plugin['help']);
+            } elseif ($compiler_cfg['parser'] == 'parsedown' && defined('PATH_TO_PARSEDOWN')) {
+                require PATH_TO_PARSEDOWN;
+                $parser = new Parsedown();
+                $plugin['help'] = $parser->text($plugin['help']);
+            }
+        }
+    }
 
     // Textpattern will textile it, and encode html.
     $plugin['help_raw'] = $plugin['help'];

@@ -2,6 +2,12 @@ h1. Plugin template for Textpattern CMS
 
 !http://textpattern.com/assets/img/branding/carver/carver-128px.svg(Textpattern Logo)!:http://textpattern.com
 
+This is a modification of the "official template/compiler package":https://github.com/textpattern/textpattern-plugin-template. The purpose is to separate the plugin's help text into its own file, which can be in either "Textile":https://txstyle.org or "GitHub-flavoured Markdown":https://help.github.com/articles/basic-writing-and-formatting-syntax/ format. The help text is then processed with the "PHP-Textile":https://github.com/textile/php-textile or "Parsedown":https://github.com/erusev/parsedown parser, depending on how you set the config files for the plugin source code and the compiler. The parser files are not included; you will have to install those yourself.
+
+Copy or rename config-dist.php to config.php and edit to suit your configuration.
+
+NB: the default zem_plugin template and example files are included, however you should use the soo_plugin/soo_plugin.php template instead. Copy or rename soo_plugin/config-dist.php to config.php and edit to suit your configuration.
+
 h2(#docs). Developer documentation
 
 Refer to the "Textpattern plugin development":http://docs.textpattern.com/development/ documentation, and notably the "Plugin template":http://docs.textpattern.com/development/plugin-template-help page.
