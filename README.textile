@@ -2,7 +2,9 @@ h1. Plugin template for Textpattern CMS
 
 !http://textpattern.com/assets/img/branding/carver/carver-128px.svg(Textpattern Logo)!:http://textpattern.com
 
-This is a modification of the "official template/compiler package":https://github.com/textpattern/textpattern-plugin-template. The purpose is to separate the plugin's help text into its own file, which can be in either "Textile":https://txstyle.org or "GitHub-flavoured Markdown":https://help.github.com/articles/basic-writing-and-formatting-syntax/ format. The help text is then processed with the "PHP-Textile":https://github.com/textile/php-textile or "Parsedown":https://github.com/erusev/parsedown parser, depending on how you set the config files for the plugin source code and the compiler. The parser files are not included; you will have to install those yourself.
+This is a modification of the "official template/compiler package":https://github.com/textpattern/textpattern-plugin-template. The purpose is to separate the plugin's help text into its own file, which can be in either "Textile":https://txstyle.org or "GitHub-flavoured Markdown":https://help.github.com/articles/basic-writing-and-formatting-syntax/ format. The help text is then processed with the "PHP-Textile":https://github.com/textile/php-textile or "Parsedown":https://github.com/erusev/parsedown parser, depending on how you set the config files for the plugin source code and the compiler. 
+
+The parser files are not included. PHP-Textile is part of the default Textpattern distribution as of version 4.6, and you can configure the complier to use that. For Parsedown you will have to install the files yourself; see config-dist.php for instructions.
 
 Copy or rename config-dist.php to config.php and edit to suit your configuration.
 
