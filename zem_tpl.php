@@ -85,7 +85,7 @@ function compile_plugin($file='') {
             if ($compiler_cfg['parser'] == 'textile') {
                 if (class_exists('Netcarver\\Textile\\Parser')) {
                     $parser = new \Netcarver\Textile\Parser('html5');
-                    $plugin['help'] = $parser->parse($plugin['help']);
+                    $plugin['help'] = $parser->textileThis($plugin['help']);
                 }
             } elseif ($compiler_cfg['parser'] == 'parsedown') {
                 if (class_exists('Parsedown')) {
