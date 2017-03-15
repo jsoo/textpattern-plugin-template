@@ -12,10 +12,11 @@
 // Uncomment and edit this line to override:
 # $plugin['name'] = 'abc_plugin';
 
-// Allow raw HTML help, as opposed to Textile.
-// 0 = Plugin help is in Textile format, no raw HTML allowed (default).
-// 1 = Plugin help is in raw HTML.  Not recommended.
-$plugin['allow_html_help'] = 1;
+// Parse help text (e.g., Textile) or leave as is. To parse, you must declare
+// the help file and parser to use in config.php)
+// 0 = Help text in Textile or Markdown (default).
+// 1 = Plugin help is in raw HTML; leave it alone.
+# $plugin['allow_html_help'] = 0;
 
 $plugin['version'] = '0.1.0';
 $plugin['author'] = 'Jeff Soo';
@@ -68,7 +69,6 @@ EOT;
 // End of textpack
 
 if (! defined('txpinterface')) {
-    global $compiler_cfg;
     @include_once('config.php');
     @include_once($compiler_cfg['path']);
 }

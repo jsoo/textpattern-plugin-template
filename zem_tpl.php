@@ -43,10 +43,8 @@ function compile_plugin($file='') {
 
     $plugin['help'] = trim(extract_section($content, 'HELP'));
     $plugin['code'] = extract_section($content, 'CODE');
-    // Textpattern will textile it, and encode html.
-    $plugin['help_raw'] = $plugin['help'];
     
-    if (! $plugin['help'] && $plugin['allow_html_help'] && ! empty($compiler_cfg['parser'])) {
+    if (! $plugin['help'] && ! empty($compiler_cfg['parser'])) {
         if (isset($compiler_cfg['helpfile'])) {
             $backtrace = debug_backtrace();
             $first_frame = array_pop($backtrace);
@@ -56,11 +54,12 @@ function compile_plugin($file='') {
                 $content[$i] = rtrim($content[$i]);
             }
             $plugin['help'] = trim(join("\n", $content));
-            $plugin['help_raw'] = $plugin['help'];
         }
     }
+
+    $plugin['help_raw'] = $plugin['help'];
         
-    if ($plugin['help']) {
+    if ($plugin['help'] && ! $plugin['allow_html_help']) {
         if (defined('txpath')) {
             global $trace;
             include txpath.'/lib/class.trace.php';
@@ -98,7 +97,6 @@ function compile_plugin($file='') {
             $plugin['allow_html_help'] = 1;
         }
     }
-
     $plugin['md5'] = md5( $plugin['code'] );
 
     $header = <<<EOF

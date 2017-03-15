@@ -14,6 +14,7 @@
 // https://github.com/erusev/parsedown
 // https://github.com/textile/php-textile
 
+global $compiler_cfg;
 $compiler_cfg = array(
 #     'path'     => 'path/to/textpattern-plugin-template/zem_tpl.php',
 #     'helpfile' => 'README.md',
