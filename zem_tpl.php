@@ -58,49 +58,46 @@ function compile_plugin($file='') {
             $plugin['help'] = trim(join("\n", $content));
             $plugin['help_raw'] = $plugin['help'];
         }
+    }
         
-        if ($plugin['help']) {
-            if (defined('txpath')) {
-                global $trace;
-                include txpath.'/lib/class.trace.php';
-                include txpath.'/vendors/Textpattern/Loader.php';
-                include txpath.'/lib/txplib_misc.php';
-                $trace = new Trace();
-                $loader = new \Textpattern\Loader(txpath.'/vendors');
-                $loader->register();
-                $loader = new \Textpattern\Loader(txpath.'/vendors/parsedown');
-                $loader->register();
-                $loader = new \Textpattern\Loader(txpath.'/lib');
-                $loader->register();
-            } else {
-                if (defined('PATH_TO_TEXTILE')) {
-                    require PATH_TO_TEXTILE.'/Parser.php';
-                    require PATH_TO_TEXTILE.'/DataBag.php';
-                    require PATH_TO_TEXTILE.'/Tag.php';
-                }
-                if (defined('PATH_TO_PARSEDOWN')) {
-                    require PATH_TO_PARSEDOWN;
-                }
+    if ($plugin['help']) {
+        if (defined('txpath')) {
+            global $trace;
+            include txpath.'/lib/class.trace.php';
+            include txpath.'/vendors/Textpattern/Loader.php';
+            include txpath.'/lib/txplib_misc.php';
+            $trace = new Trace();
+            $loader = new \Textpattern\Loader(txpath.'/vendors');
+            $loader->register();
+            $loader = new \Textpattern\Loader(txpath.'/vendors/parsedown');
+            $loader->register();
+            $loader = new \Textpattern\Loader(txpath.'/lib');
+            $loader->register();
+        } else {
+            if (defined('PATH_TO_TEXTILE')) {
+                require PATH_TO_TEXTILE.'/Parser.php';
+                require PATH_TO_TEXTILE.'/DataBag.php';
+                require PATH_TO_TEXTILE.'/Tag.php';
             }
-            if ($compiler_cfg['parser'] == 'textile') {
-                if (class_exists('Netcarver\\Textile\\Parser')) {
-                    $parser = new \Netcarver\Textile\Parser('html5');
-                    $plugin['help'] = $parser->textileThis($plugin['help']);
-                }
-            } elseif ($compiler_cfg['parser'] == 'parsedown') {
-                if (class_exists('Parsedown')) {
-                    $parser = new Parsedown();
-                    $plugin['help'] = $parser->text($plugin['help']);
-                }
+            if (defined('PATH_TO_PARSEDOWN')) {
+                require PATH_TO_PARSEDOWN;
             }
         }
+        if (! $compiler_cfg || $compiler_cfg['parser'] == 'textile') {
+            if (class_exists('Netcarver\\Textile\\Parser')) {
+                $parser = new \Netcarver\Textile\Parser('html5');
+                $plugin['help'] = $parser->textileThis($plugin['help']);
+            }
+        } elseif ($compiler_cfg['parser'] == 'parsedown') {
+            if (class_exists('Parsedown')) {
+                $parser = new Parsedown();
+                $plugin['help'] = $parser->text($plugin['help']);
+            }
+        }
+        if ($plugin['help'] !== $plugin['raw_help']) {
+            $plugin['allow_html_help'] = 1;
+        }
     }
-    // This is for bc; and for help that needs to use it.
-//     @include('classTextile.php');
-//     if (class_exists('Textile')) {
-//         $textile = new Textile();
-//         $plugin['help'] = $textile->TextileThis($plugin['help']);
-//     }
 
     $plugin['md5'] = md5( $plugin['code'] );
 
